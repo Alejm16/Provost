@@ -1,47 +1,53 @@
 from csv import reader,DictReader
 from StuData import info 
+import csv
 
 data = [] #Creates a list
 course = [] #Creates list for courses
-teacher = [] #Creates list for teachers
 present = [] #number of present students
-#i = 0 #will keep track of people present
-num = 0 # will check how many total attended class
-
-with open('Attendence_example.csv','r') as read_ojb:
+MyDict = {} # Will hold the dictionary for (course, teacher, number present)
+total = []
+percent =[]
+FileName = input("Enter File Name: ") # Read user input
+print("Data is read as so : \nCourse name: ['Teacher Name' , 'Total Present For Week', 'Total Students For Week', 'Attendance Percentage For Week']\n")
+with open(FileName,'r') as read_ojb:
     dict_reader = DictReader(read_ojb)
-    list_of_dict = list(dict_reader)
-    for key in list_of_dict:
+    list_of_dict = list(dict_reader) #Created list form the DictReader
+    for key in list_of_dict: #Reads in the key for each list
+        MyDict[key['Course Name']] = key['Teacher Name'] #Creates dictionary with course and teacher
         if key['Course Name'] not in course: #adds each course into a list 
             course.append(key['Course Name'])
-        if key['Teacher Name'] not in teacher:#adds teachers to a list
-            teacher.append(key['Teacher Name'])
-    for x in range(len(course)):
-        i = 0
+
+    for x in range(len(course)): #Will grab students present in a class
+        i = 0 #Keep track of present
+        j = 0 #Keep track of total
         for key in list_of_dict:
-            if course[x] == key['Course Name'] and key['Attendance'] == 'present':
-                i+=1
-        present.append(i)
+            if course[x] == key['Course Name'] and key['Attendance'] == 'present': #Checks if course of x is equal to course in excel, then checks if attendenace is present
+                i+=1 #increment if present
+                j+=1 #increment for total
+            elif course[x] == key['Course Name'] and key['Attendance'] == 'absent':
+                j+=1 #Total students for week
+        total.append(j) #Keeps track of total
+        present.append(i) #total number of users present for the week
 
 
-
+for x in range(len(present)):
+    percent.append((present[x]/total[x]))
+#Note each number is represented as "Number Present","Total","Attendance percent"
+i = 0#Used to keep count of looping
+for key in MyDict:
+    MyDict[key] = [MyDict[key],present[i],total[i],"{:.2%}".format(percent[i])] #Changing dictionary
+    i+=1
+    print ("{}: {}".format(key,MyDict[key])) #Printing out the dictionary
+  
+with open('Output.csv','w') as output: #Opens output file
+    output_data = csv.writer(output, delimiter=',')
+    output_data.writerow(['Teacher Name', 'Total Present For Week', 'Total Students For Week', 'Attendance Percentage For Week'])
+    for key in MyDict:
+        output_data.writerow(MyDict[key])
         
 
 
-#Printing purposes
-for x in range(len(course)):
-    print(course[x])
-for x in range(len(teacher)):
-    print(teacher[x])
-for x in range(len(present)):
-    print(present[x])
-
-
-  #      data.append(info(key['Course Name'],num, key['Teacher Name'])) #adds data to a list to go through
-        #print(key['Course Name'],key['Teacher Name'],key['Student Name'],key['Attendance'])
-
-#for x in range(len(data)): #prints out the 
- #   print(data[x].name,' | ',data[x].course,' | ',data[x].teacher,' | ',data[x].status)
     
 
 
