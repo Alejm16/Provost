@@ -36,13 +36,13 @@ for x in range(len(present)):
 #Note each number is represented as "Number Present","Total","Attendance percent"
 i = 0#Used to keep count of looping
 for key in MyDict:
-    MyDict[key] = [MyDict[key],present[i],total[i],"{:.2%}".format(percent[i])] #Changing dictionary
+    MyDict[key] = [key,MyDict[key],present[i],total[i],"{:.2%}".format(percent[i])] #Changing dictionary
     i+=1
-    print ("{}: {}".format(key,MyDict[key])) #Printing out the dictionary
+    #print ("{}: {}".format(key,MyDict[key])) #Printing out the dictionary
   
 with open('Output.csv','w') as output: #Opens output file
     output_data = csv.writer(output, delimiter=',')
-    output_data.writerow(['Teacher Name', 'Total Present For Week', 'Total Students For Week', 'Attendance Percentage For Week'])
+    output_data.writerow(['Course', 'Teacher Name', 'Total Present For Week', 'Total Students For Week', 'Attendance Percentage For Week'])
     for key in MyDict:
         output_data.writerow(MyDict[key])
         
