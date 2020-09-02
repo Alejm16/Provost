@@ -15,7 +15,7 @@ with open(FileName,'r') as read_ojb:
     list_of_dict = list(dict_reader) #Created list form the DictReader
     for key in list_of_dict: #Reads in the key for each list
         MyDict[key['Section Name']] = key['Teacher Name'] #Creates dictionary with course and teacher
-        if key['Section Name'] not in course: #adds each course into a list   
+        if key['Section Name'] not in course: #adds each course into a list     
             course.append(key['Section Name'])
             data.append(key['Course Name'])
 
@@ -41,7 +41,11 @@ for x in range(len(present)):
 #Note each number is represented as "Number Present","Total","Attendance percent"
 i = 0#Used to keep count of looping
 for key in MyDict:
-    MyDict[key] = [data[i],key,MyDict[key],present[i],total[i],"{:.2%}".format(percent[i])] #Changing dictionary
+    words = data[i].split()
+    if "Section" in words or "Section(s)" in words or "Sections" in words:
+        MyDict[key] = [data[i],key,MyDict[key],present[i],total[i],"{:.2%}".format(percent[i])] #Changing dictionary
+    else:
+        MyDict[key] = " "
     i+=1
     #print ("{}: {}".format(key,MyDict[key])) #Printing out the dictionary
   
@@ -49,8 +53,8 @@ with open('Output.csv','w') as output: #Opens output file
     output_data = csv.writer(output, delimiter=',')
     output_data.writerow(['Course','Section','Teacher Name', 'Total Present For Week', 'Total Students For Week', 'Attendance Percentage For Week'])
     for key in MyDict:
-        output_data.writerow(MyDict[key])
-        
+        if MyDict[key] != " ":
+            output_data.writerow(MyDict[key])
 
 
     
