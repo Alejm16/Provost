@@ -50,7 +50,7 @@ for key in MyDict:
     #print ("{}: {}".format(key,MyDict[key])) #Printing out the dictionary
   
 with open('Output.csv','w') as output: #Opens output file
-    output_data = csv.writer(output, delimiter=',')
+    output_data = csv.writer(output, delimiter=',',lineterminator='\r')
     output_data.writerow(['Course','Section','Teacher Name', 'Total Present For Week', 'Total Students For Week', 'Attendance Percentage For Week'])
     for key in MyDict:
         if MyDict[key] != " ":
